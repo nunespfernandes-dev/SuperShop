@@ -1,0 +1,50 @@
+﻿@model SuperShop.Web.Models.Product
+
+@{
+    ViewData["Title"] = "Novo Produto";
+}
+
+<h1>Novo Produto</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageUrl" class="control-label"></label>
+        <input asp-for="ImageUrl" class="form-control" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastPurchase" class="control-label"></label>
+        <input asp-for="LastPurchase" class="form-control" />
+        <span asp-validation-for="LastPurchase" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastSale" class="control-label"></label>
+        <input asp-for="LastSale" class="form-control" />
+        <span asp-validation-for="LastSale" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        <label asp-for="IsAvailable" class="form-check-label"></label>
+        <input asp-for="IsAvailable" class="form-check-input" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Stock" class="control-label"></label>
+        <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <input type="submit" value="Criar" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Index"><i class="bi bi-arrow-left"></i> Voltar à lista</a>

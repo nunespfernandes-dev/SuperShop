@@ -1,0 +1,24 @@
+﻿@model SuperShop.Web.Models.Product
+
+@{
+    ViewData["Title"] = "Apagar Produto";
+}
+
+<h1>Apagar Produto</h1>
+
+<h3>Tens a certeza que queres apagar este produto?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Price)</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Apagar" class="btn btn-danger" /> |
+        <a asp-action="Index"><i class="bi bi-arrow-left"></i> Voltar à lista</a>
+    </form>
+</div>
