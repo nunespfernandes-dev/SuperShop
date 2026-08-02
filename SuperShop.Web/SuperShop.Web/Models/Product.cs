@@ -9,6 +9,7 @@ namespace SuperShop.Web.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(50, ErrorMessage = "O campo {0} não pode ter mais do que {1} caracteres.")]
         [Display(Name = "Nome")]
         public string Name { get; set; }
 
@@ -22,11 +23,11 @@ namespace SuperShop.Web.Models
 
         [Display(Name = "Última Compra")]
         [DataType(DataType.Date)]
-        public DateTime LastPurchase { get; set; }
+        public DateTime? LastPurchase { get; set; }
 
         [Display(Name = "Última Venda")]
         [DataType(DataType.Date)]
-        public DateTime LastSale { get; set; }
+        public DateTime? LastSale { get; set; }
 
         [Display(Name = "Disponível")]
         public bool IsAvailable { get; set; }
