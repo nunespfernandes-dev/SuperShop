@@ -1,11 +1,10 @@
-﻿using SuperShop.Web.Data;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SuperShop.Web.Data;
 
 namespace SuperShop.Web.Models
 {
-
     public class Product : IEntity
     {
         public int Id { get; set; }
@@ -38,4 +37,3 @@ namespace SuperShop.Web.Models
         public float Stock { get; set; }
     }
 }
-

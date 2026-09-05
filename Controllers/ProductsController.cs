@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SuperShop.Web.Data;
 using SuperShop.Web.Models;
@@ -7,6 +7,8 @@ namespace SuperShop.Web.Controllers
 {
     public class ProductsController : Controller
     {
+        // Repara: já não há nenhuma referência ao DataContext nem ao
+        // Entity Framework aqui. O controlador só conhece o repositório.
         private readonly IProductRepository _productRepository;
 
         public ProductsController(IProductRepository productRepository)
@@ -45,6 +47,8 @@ namespace SuperShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // CreateAsync já grava sozinho (é o "bypass" que o repositório
+                // genérico faz internamente) — não é preciso chamar SaveAllAsync aqui.
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
@@ -71,6 +75,8 @@ namespace SuperShop.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                // Verifica outra vez se o produto ainda existe: pode ter sido
+                // apagado por outra pessoa entretanto (concorrência).
                 if (!await _productRepository.ExistAsync(product.Id)) return NotFound();
 
                 await _productRepository.UpdateAsync(product);

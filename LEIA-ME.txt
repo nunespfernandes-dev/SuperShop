@@ -1,0 +1,60 @@
+SuperShop — Projeto ASP.NET Core MVC (.NET 8, substituindo .NET 5.0)
+======================================================================
+
+Este é o ponto de partida do projeto SuperShop, conforme os tutoriais:
+  - Tutorial_ASPNET_MVC_Sales_e_SuperShop.docx (Parte 2)
+  - Tutorial_SuperShop_Continuacao.docx (validações + Seed)
+  - Tutorial_SuperShop_Continuacao2_Repository.docx (Repository Pattern genérico)
+
+NOTA SOBRE A VERSAO .NET: o enunciado pede .NET 5.0, mas essa versão
+atingiu o fim de suporte oficial da Microsoft (maio de 2022) e o respetivo
+SDK já não está disponível para instalação em máquinas novas. Este projeto
+foi desenvolvido em .NET 8.0 (LTS) como substituto direto — o código é
+idêntico em ambas as versões. Inclui esta nota (ou semelhante) na tua
+entrega ao professor.
+
+Arquitetura atual (Repository Pattern genérico):
+  Data/IEntity.cs                    - interface comum a todas as entidades (têm Id)
+  Data/IGenericRepository.cs         - interface do CRUD genérico (para qualquer T)
+  Data/GenericRepository.cs          - implementação genérica do CRUD (usa EF Core)
+  Data/IProductRepository.cs         - interface específica dos produtos (herda a genérica)
+  Data/ProductRepository.cs          - implementação específica dos produtos
+  Data/DataContext.cs                - o DbContext do Entity Framework Core
+  Data/Seed.cs                       - popula a base de dados com produtos de exemplo
+  Models/Product.cs                  - o modelo Product (implementa IEntity; validações:
+                                        Nome obrigatório, máx. 50 caracteres; datas
+                                        de compra/venda opcionais)
+  Controllers/ProductsController.cs  - CRUD completo, já não fala diretamente com o
+                                        Entity Framework — só conhece IProductRepository
+  Views/Products/*.cshtml            - as 5 views (Index, Create, Edit, Details, Delete)
+  Views/Shared/_Layout.cshtml        - layout com Bootstrap Icons + menu "Produtos"
+  Program.cs                         - regista o DbContext, o Seed, o repositório e a app
+
+Verificação: consegui compilar com sucesso (0 erros) num compilador C#/.NET
+real: Product.cs, todas as 5 Views, e — importante — IEntity.cs,
+IGenericRepository.cs, IProductRepository.cs, ProductRepository.cs e o
+ProductsController.cs inteiro (já não depende do Entity Framework
+diretamente, só de interfaces próprias). Os únicos ficheiros que não
+consegui compilar são os que realmente precisam do pacote NuGet do Entity
+Framework Core (DataContext.cs, GenericRepository.cs, Seed.cs e o
+Program.cs) — no teu Visual Studio, com o NuGet a funcionar, vais
+confirmar que compilam sem problemas.
+
+Ícones: usa Bootstrap Icons via CDN (carregado no _Layout.cshtml), por isso
+não é preciso procurar nem descarregar nenhum ficheiro de ícone à parte —
+só precisas de internet a correr a aplicação.
+
+Como usar:
+  1. Cria/clona o repositório GitHub "SuperShop".
+  2. Cria um novo projeto ASP.NET Core Web App (MVC) chamado SuperShop.Web
+     dentro dessa pasta, com .NET 8.0.
+  3. Copia estes ficheiros para dentro do projeto criado, nas mesmas pastas.
+  4. Instala os pacotes NuGet: Microsoft.EntityFrameworkCore.SqlServer,
+     .Tools e .Design.
+  5. Corre Add-Migration InitialDB e Update-Database na Package Manager
+     Console.
+  6. Corre a aplicação (F5) — o Seed cria a base de dados e já a popula com
+     4 produtos de exemplo (iPhone X, Magic Mouse, iWatch Series 4, iPad Mini).
+  7. Testa criar/editar/apagar um produto.
+
+Segue os três tutoriais (docx) para o passo a passo detalhado.
