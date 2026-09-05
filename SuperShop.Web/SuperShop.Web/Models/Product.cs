@@ -35,4 +35,3 @@ namespace SuperShop.Web.Models
         [Display(Name = "Stock")]
         public float Stock { get; set; }
     }
-}
