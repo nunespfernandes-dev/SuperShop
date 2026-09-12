@@ -1,4 +1,4 @@
-﻿@model SuperShop.Web.Models.Product
+@model SuperShop.Web.Models.ProductViewModel
 
 @{
     ViewData["Title"] = "Editar Produto";
@@ -6,9 +6,10 @@
 
 <h1>Editar Produto</h1>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImageUrl" />
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
@@ -20,9 +21,15 @@
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ImageUrl" class="control-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="mb-2">
+                <img src="@Model.ImageUrl" alt="Imagem atual" style="width:100px" class="img-thumbnail" />
+            </div>
+        }
+        <label asp-for="ImagesFile" class="control-label"></label>
+        <input asp-for="ImagesFile" type="file" class="form-control" />
+        <span asp-validation-for="ImagesFile" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="LastPurchase" class="control-label"></label>

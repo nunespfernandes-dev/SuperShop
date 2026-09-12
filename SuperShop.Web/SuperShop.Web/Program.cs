@@ -39,6 +39,15 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // utilizadores num único sítio.
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 
+// ImageHelper: centraliza o upload de ficheiros (imagens) para dentro de
+// wwwroot, gerando sempre um nome único (Guid) para nunca haver colisões.
+builder.Services.AddScoped<IImageHelper, ImageHelper>();
+
+// ConverterHelper: converte entre Product (entidade, o que vai para a base
+// de dados) e ProductViewModel (o que a view do Create/Edit recebe, que tem
+// também o ficheiro da imagem) — nos dois sentidos.
+builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+
 var app = builder.Build();
 
 // Antes de arrancar a aplicação, corre o Seed: garante que a base de dados

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SuperShop.Web.Models.Product>
+@model IEnumerable<SuperShop.Web.Models.Product>
 
 @{
     ViewData["Title"] = "Produtos";
@@ -14,9 +14,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Imagem</th>
             <th>@Html.DisplayNameFor(model => model.Name)</th>
             <th>@Html.DisplayNameFor(model => model.Price)</th>
-            <th>@Html.DisplayNameFor(model => model.ImageUrl)</th>
             <th>@Html.DisplayNameFor(model => model.IsAvailable)</th>
             <th>@Html.DisplayNameFor(model => model.Stock)</th>
             <th></th>
@@ -26,9 +26,18 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.Name" style="width:60px" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sem imagem</span>
+                    }
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>@Html.DisplayFor(modelItem => item.ImageUrl)</td>
                 <td>@Html.DisplayFor(modelItem => item.IsAvailable)</td>
                 <td>@Html.DisplayFor(modelItem => item.Stock)</td>
                 <td>

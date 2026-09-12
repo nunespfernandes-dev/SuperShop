@@ -1,4 +1,4 @@
-﻿@model SuperShop.Web.Models.Product
+@model SuperShop.Web.Models.Product
 
 @{
     ViewData["Title"] = "Apagar Produto";
@@ -14,6 +14,18 @@
 
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
         <dd class="col-sm-9">@Html.DisplayFor(model => model.Price)</dd>
+
+        <dt class="col-sm-3">Imagem</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Name" style="width:100px" class="img-thumbnail" />
+            }
+            else
+            {
+                <span class="text-muted">Sem imagem</span>
+            }
+        </dd>
     </dl>
 
     <form asp-action="Delete">

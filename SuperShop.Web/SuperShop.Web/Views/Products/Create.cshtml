@@ -1,4 +1,4 @@
-﻿@model SuperShop.Web.Models.Product
+@model SuperShop.Web.Models.ProductViewModel
 
 @{
     ViewData["Title"] = "Novo Produto";
@@ -6,8 +6,14 @@
 
 <h1>Novo Produto</h1>
 
-<form asp-action="Create">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @* ImageUrl é uma string não-anulável (Nullable ativo no projeto), por isso
+       o MVC trata-a como implicitamente obrigatória. Sem este campo oculto,
+       o formulário nunca a envia, o ModelState fica sempre inválido e o
+       Create falha em silêncio (sem nenhum erro visível, porque não há
+       aqui nenhum span à espera de mostrar o erro deste campo). *@
+    <input type="hidden" asp-for="ImageUrl" />
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
@@ -19,9 +25,9 @@
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ImageUrl" class="control-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        <label asp-for="ImagesFile" class="control-label"></label>
+        <input asp-for="ImagesFile" type="file" class="form-control" />
+        <span asp-validation-for="ImagesFile" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="LastPurchase" class="control-label"></label>
