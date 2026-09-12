@@ -1,4 +1,3 @@
-﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SuperShop.Web.Data;
 using SuperShop.Web.Models;
@@ -8,10 +7,12 @@ namespace SuperShop.Web.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly IUserHelper _userHelper;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
         {
             _productRepository = productRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Products
@@ -45,6 +46,10 @@ namespace SuperShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // TODO: substituir por User.Identity.Name quando o login existir.
+                // Por agora, todos os produtos criados ficam associados ao admin.
+                product.User = await _userHelper.GetUserByEmailAsync(Seed.AdminEmail);
+
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
@@ -72,6 +77,11 @@ namespace SuperShop.Web.Controllers
             if (ModelState.IsValid)
             {
                 if (!await _productRepository.ExistAsync(product.Id)) return NotFound();
+
+                // A View de Edit não envia o User (não há nenhum campo, nem
+                // oculto, para isso). Sem esta linha, o UPDATE gravava o
+                // User a null, porque o model binder nunca o preenche.
+                product.User = await _userHelper.GetUserByEmailAsync(Seed.AdminEmail);
 
                 await _productRepository.UpdateAsync(product);
                 return RedirectToAction(nameof(Index));

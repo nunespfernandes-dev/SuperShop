@@ -1,4 +1,4 @@
-﻿using SuperShop.Web.Models;
+using SuperShop.Web.Models;
 
 namespace SuperShop.Web.Data
 {
@@ -7,5 +7,9 @@ namespace SuperShop.Web.Data
     // produtos (ex.: GetProductsByCategoryAsync), é aqui que o acrescentas.
     public interface IProductRepository : IGenericRepository<Product>
     {
+        // O GetAll() do genérico só conhece Product — não traz o User
+        // (é outra entidade/tabela à parte). Este método é que faz o
+        // "eager loading" do utilizador associado a cada produto.
+        IQueryable<Product> GetAllWithUsers();
     }
 }

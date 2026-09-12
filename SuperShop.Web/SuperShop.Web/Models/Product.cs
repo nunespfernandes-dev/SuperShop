@@ -36,6 +36,13 @@ namespace SuperShop.Web.Models
 
         [Display(Name = "Stock")]
         public float Stock { get; set; }
+
+        // Utilizador que criou/é dono deste produto. Nullable porque, por
+        // agora (sem login), pode haver produtos antigos sem utilizador
+        // associado — é sempre preenchido a partir do Create/Edit no
+        // controlador.
+        [Display(Name = "Utilizador")]
+        public User? User { get; set; }
     }
 }
 
