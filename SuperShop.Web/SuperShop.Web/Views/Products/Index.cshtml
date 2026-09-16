@@ -1,4 +1,5 @@
 @model IEnumerable<SuperShop.Web.Models.Product>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     ViewData["Title"] = "Produtos";
@@ -27,14 +28,7 @@
         {
             <tr>
                 <td>
-                    @if (!string.IsNullOrEmpty(item.ImageUrl))
-                    {
-                        <img src="@item.ImageUrl" alt="@item.Name" style="width:60px" class="img-thumbnail" />
-                    }
-                    else
-                    {
-                        <span class="text-muted">Sem imagem</span>
-                    }
+                    <img src="@item.GetImageFullPath(Configuration["Blob:BaseUrl"])" alt="@item.Name" style="width:60px" class="img-thumbnail" />
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>

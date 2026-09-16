@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SuperShop.Web.Data;
 using SuperShop.Web.Models;
@@ -8,18 +9,18 @@ namespace SuperShop.Web.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IUserHelper _userHelper;
-        private readonly IImageHelper _imageHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
         public ProductsController(
             IProductRepository productRepository,
             IUserHelper userHelper,
-            IImageHelper imageHelper,
+            IBlobHelper blobHelper,
             IConverterHelper converterHelper)
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
 
@@ -41,37 +42,35 @@ namespace SuperShop.Web.Controllers
         }
 
         // GET: Products/Create
+        [Authorize]
         public IActionResult Create()
         {
-            return View();
+            // Sem isto, o Model chegava null a Create.cshtml e a
+            // _ProductForm.cshtml rebentava com NullReferenceException ao
+            // chamar Model.GetImageFullPath(...).
+            return View(new ProductViewModel());
         }
 
         // POST: Products/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
-            // Ao criar, ainda não existe imagem nenhuma — é este método que a
-            // vai gerar a partir do ficheiro enviado, mais abaixo. O campo
-            // oculto ImageUrl chega sempre vazio neste ponto, e por ser uma
-            // string não-anulável o ASP.NET Core marca-o como obrigatório
-            // por omissão. Sem esta linha, o ModelState fica sempre inválido
-            // e o produto nunca chega a ser criado.
-            ModelState.Remove(nameof(model.ImageUrl));
-
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                var imagesId = Guid.Empty;
 
                 if (model.ImagesFile != null && model.ImagesFile.Length > 0)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImagesFile, "products");
+                    imagesId = await _blobHelper.UploadBlobAsync(model.ImagesFile, "products");
                 }
 
-                var product = _converterHelper.ToProduct(model, path, true);
+                var product = _converterHelper.ToProduct(model, imagesId, true);
 
-                // TODO: substituir por User.Identity.Name quando o login existir.
-                // Por agora, todos os produtos criados ficam associados ao admin.
+                // TODO: substituir por User.Identity.Name agora que já
+                // existe login. Por agora, todos os produtos criados
+                // continuam associados ao admin do seed.
                 product.User = await _userHelper.GetUserByEmailAsync(Seed.AdminEmail);
 
                 await _productRepository.CreateAsync(product);
@@ -81,6 +80,7 @@ namespace SuperShop.Web.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -93,34 +93,27 @@ namespace SuperShop.Web.Controllers
         }
 
         // POST: Products/Edit/5
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductViewModel model)
         {
             if (id != model.Id) return NotFound();
 
-            // Mesmo motivo do Create: ImageUrl é string não-anulável, por
-            // isso é implicitamente obrigatória. Se o produto ainda não
-            // tinha imagem (campo oculto chega vazio), a validação falhava
-            // sempre, mesmo sem se enviar ficheiro novo nenhum. O valor
-            // certo é sempre calculado a seguir (mantém o antigo ou usa o
-            // novo upload), por isso não faz sentido validá-lo aqui.
-            ModelState.Remove(nameof(model.ImageUrl));
-
             if (ModelState.IsValid)
             {
                 if (!await _productRepository.ExistAsync(model.Id)) return NotFound();
 
-                // Por omissão mantém o caminho que já lá estava (campo oculto
+                // Por omissão mantém o blob que já lá estava (campo oculto
                 // na view). Só se vier um ficheiro novo é que se substitui.
-                var path = model.ImageUrl;
+                var imagesId = model.ImagesId;
 
                 if (model.ImagesFile != null && model.ImagesFile.Length > 0)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImagesFile, "products");
+                    imagesId = await _blobHelper.UploadBlobAsync(model.ImagesFile, "products");
                 }
 
-                var product = _converterHelper.ToProduct(model, path, false);
+                var product = _converterHelper.ToProduct(model, imagesId, false);
 
                 // A View de Edit não envia o User (não há nenhum campo, nem
                 // oculto, para isso). Sem esta linha, o UPDATE gravava o

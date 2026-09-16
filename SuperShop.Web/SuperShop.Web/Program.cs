@@ -34,14 +34,19 @@ builder.Services.AddTransient<Seed>();
 // durante esse pedido, e depois descartado.
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-// UserHelper: encapsula o UserManager<User>, para não o injetar diretamente
-// em todo o lado (controladores, seed, etc.) e centralizar a gestão de
-// utilizadores num único sítio.
+// UserHelper: encapsula o UserManager<User> e o SignInManager<User>, para
+// não os injetar diretamente em todo o lado (controladores, seed, etc.) e
+// centralizar a gestão de utilizadores e autenticação num único sítio.
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 
 // ImageHelper: centraliza o upload de ficheiros (imagens) para dentro de
 // wwwroot, gerando sempre um nome único (Guid) para nunca haver colisões.
+// Já não é usado pelos Produtos (ver IBlobHelper), mas fica disponível.
 builder.Services.AddScoped<IImageHelper, ImageHelper>();
+
+// BlobHelper: centraliza o upload de imagens para o Azure Blob Storage — é
+// o que os Produtos usam agora, em vez do ImageHelper (pasta local).
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 
 // ConverterHelper: converte entre Product (entidade, o que vai para a base
 // de dados) e ProductViewModel (o que a view do Create/Edit recebe, que tem

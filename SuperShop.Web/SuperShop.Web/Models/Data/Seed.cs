@@ -66,7 +66,6 @@ namespace SuperShop.Web.Data
             {
                 Name = name,
                 Price = _random.Next(1000),
-                ImageUrl = string.Empty,
                 IsAvailable = true,
                 Stock = _random.Next(100),
                 User = user,

@@ -4,14 +4,14 @@ namespace SuperShop.Web.Data
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Product ToProduct(ProductViewModel model, string imageUrl, bool isNew)
+        public Product ToProduct(ProductViewModel model, Guid imagesId, bool isNew)
         {
             return new Product
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
                 Price = model.Price,
-                ImageUrl = imageUrl,
+                ImagesId = imagesId,
                 LastPurchase = model.LastPurchase,
                 LastSale = model.LastSale,
                 IsAvailable = model.IsAvailable,
@@ -27,7 +27,7 @@ namespace SuperShop.Web.Data
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
-                ImageUrl = product.ImageUrl,
+                ImagesId = product.ImagesId,
                 LastPurchase = product.LastPurchase,
                 LastSale = product.LastSale,
                 IsAvailable = product.IsAvailable,

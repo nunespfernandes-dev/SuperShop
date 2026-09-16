@@ -8,48 +8,7 @@
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="ImageUrl" />
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Price" class="control-label"></label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-        {
-            <div class="mb-2">
-                <img src="@Model.ImageUrl" alt="Imagem atual" style="width:100px" class="img-thumbnail" />
-            </div>
-        }
-        <label asp-for="ImagesFile" class="control-label"></label>
-        <input asp-for="ImagesFile" type="file" class="form-control" />
-        <span asp-validation-for="ImagesFile" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastPurchase" class="control-label"></label>
-        <input asp-for="LastPurchase" class="form-control" />
-        <span asp-validation-for="LastPurchase" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastSale" class="control-label"></label>
-        <input asp-for="LastSale" class="form-control" />
-        <span asp-validation-for="LastSale" class="text-danger"></span>
-    </div>
-    <div class="form-check">
-        <label asp-for="IsAvailable" class="form-check-label"></label>
-        <input asp-for="IsAvailable" class="form-check-input" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Stock" class="control-label"></label>
-        <input asp-for="Stock" class="form-control" />
-        <span asp-validation-for="Stock" class="text-danger"></span>
-    </div>
+    <partial name="_ProductForm" />
     <div class="form-group mt-3">
         <input type="submit" value="Guardar" class="btn btn-primary" />
     </div>
