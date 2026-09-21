@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Acesso não autorizado";
+}
+
+<div class="text-center py-5">
+    <i class="fa fa-ban text-danger" style="font-size: 5rem;"></i>
+    <h1 class="mt-3">Acesso não autorizado</h1>
+    <p class="lead">
+        Não tens permissões para aceder a esta página, ou é preciso fazer login primeiro.
+    </p>
+    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Fazer login</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Voltar ao início</a>
+</div>

@@ -3,10 +3,10 @@ using SuperShop.Web.Models;
 
 namespace SuperShop.Web.Data
 {
-    // "Seed" = semente: cria a base de dados (se não existir), cria o
-    // utilizador admin e mete lá dentro alguns produtos de exemplo, para
-    // nunca teres de andar a escrever tudo à mão sempre que apagas a base de
-    // dados durante os testes.
+    // "Seed" = semente: cria a base de dados (se não existir), cria os
+    // roles (Admin/Customer), cria o utilizador admin e mete lá dentro
+    // alguns produtos de exemplo, para nunca teres de andar a escrever tudo
+    // à mão sempre que apagas a base de dados durante os testes.
     public class Seed
     {
         private readonly DataContext _context;
@@ -17,6 +17,10 @@ namespace SuperShop.Web.Data
         // "dono" temporário de tudo o que for criado, até existir login.
         public const string AdminEmail = "admin@supershop.com";
         private const string AdminPassword = "123456";
+
+        // Nomes dos roles usados na aplicação.
+        public const string AdminRole = "Admin";
+        public const string CustomerRole = "Customer";
 
         public Seed(DataContext context, IUserHelper userHelper)
         {
@@ -29,6 +33,10 @@ namespace SuperShop.Web.Data
         {
             // Garante que a base de dados existe (cria-a se ainda não existir).
             await _context.Database.EnsureCreatedAsync();
+
+            // Garante que os roles existem antes de criar qualquer utilizador.
+            await _userHelper.CheckRoleAsync(AdminRole);
+            await _userHelper.CheckRoleAsync(CustomerRole);
 
             var admin = await _userHelper.GetUserByEmailAsync(AdminEmail);
             if (admin == null)
@@ -46,6 +54,14 @@ namespace SuperShop.Web.Data
                 {
                     throw new InvalidOperationException("Não foi possível criar o utilizador admin (seed).");
                 }
+            }
+
+            // Confirma sempre que o admin tem o role Admin (mesmo que já
+            // existisse de antes de introduzirmos os roles).
+            var isAdminInRole = await _userHelper.IsUserInRoleAsync(admin, AdminRole);
+            if (!isAdminInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(admin, AdminRole);
             }
 
             // Só cria produtos de exemplo se a tabela ainda estiver vazia.
