@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SuperShop.Web.Models;
 
 namespace SuperShop.Web.Data
@@ -11,5 +12,9 @@ namespace SuperShop.Web.Data
         // (é outra entidade/tabela à parte). Este método é que faz o
         // "eager loading" do utilizador associado a cada produto.
         IQueryable<Product> GetAllWithUsers();
+
+        // Aula 23 — Devolve os produtos já prontos para uma combobox
+        // (<select>), com a opção "(Selecione um produto...)" no topo.
+        IEnumerable<SelectListItem> GetComboProducts();
     }
 }

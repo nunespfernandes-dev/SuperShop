@@ -47,6 +47,11 @@ builder.Services.AddTransient<Seed>();
 // durante esse pedido, e depois descartado.
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+// Aula 22 — Repositório das encomendas (um repositório por ÁREA: trata de
+// Order, OrderDetail e OrderDetailTemp). Sem esta linha dá o erro
+// "Unable to resolve service for type IOrderRepository".
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 // UserHelper: encapsula o UserManager<User>, o SignInManager<User> e o
 // RoleManager<IdentityRole>, para não os injetar diretamente em todo o lado
 // (controladores, seed, etc.) e centralizar a gestão de utilizadores,

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace SuperShop.Web.Models
 {
@@ -10,5 +11,10 @@ namespace SuperShop.Web.Models
         public string FirstName { get; set; } = string.Empty;
 
         public string LastName { get; set; } = string.Empty;
+
+        // Aula 22/23 — Nome completo (calculado, não vai para a tabela).
+        // Usado na lista de encomendas quando quem está logado é o Admin.
+        [Display(Name = "Nome completo")]
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

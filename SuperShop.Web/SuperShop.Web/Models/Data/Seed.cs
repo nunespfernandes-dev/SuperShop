@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SuperShop.Web.Models;
 
 namespace SuperShop.Web.Data
@@ -31,8 +32,13 @@ namespace SuperShop.Web.Data
 
         public async Task SeedAsync()
         {
-            // Garante que a base de dados existe (cria-a se ainda não existir).
-            await _context.Database.EnsureCreatedAsync();
+            // Aula 22 — Antes usávamos EnsureCreatedAsync(), mas esse método
+            // cria a base de dados SEM usar as migrações (não cria a tabela
+            // __EFMigrationsHistory), e depois o Update-Database rebentava
+            // com "There is already an object named 'Products'".
+            // MigrateAsync() cria a base de dados se não existir E aplica
+            // todas as migrações que faltem, sempre que a app arranca.
+            await _context.Database.MigrateAsync();
 
             // Garante que os roles existem antes de criar qualquer utilizador.
             await _userHelper.CheckRoleAsync(AdminRole);

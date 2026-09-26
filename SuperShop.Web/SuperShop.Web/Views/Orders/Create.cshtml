@@ -1,0 +1,63 @@
+@model IEnumerable<SuperShop.Web.Models.OrderDetailTemp>
+
+@{
+    ViewData["Title"] = "Nova encomenda";
+
+    // Traz as linhas para memória UMA vez: o "Value" é calculado em C#
+    // (não existe na tabela), por isso o Sum não pode ser feito em SQL.
+    var items = Model.ToList();
+}
+
+<h2>Nova encomenda</h2>
+
+<p>
+    <a asp-action="AddProduct" class="btn btn-success"><i class="bi bi-plus-circle"></i> Adicionar produto</a>
+    @* O "Confirmar encomenda" (ConfirmOrder) é feito na próxima aula *@
+    <button type="button" class="btn btn-primary" disabled title="Disponível na próxima aula">
+        <i class="bi bi-check2-circle"></i> Confirmar encomenda
+    </button>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Voltar às encomendas</a>
+</p>
+
+@if (!items.Any())
+{
+    <h5 class="text-muted">Ainda não há produtos nesta encomenda.</h5>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Product.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+                <th>@Html.DisplayNameFor(model => model.Value)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                    <td>
+                        <a asp-action="Increase" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Aumentar"><i class="bi bi-plus-lg"></i></a>
+                        <a asp-action="Decrease" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Diminuir"><i class="bi bi-dash-lg"></i></a>
+                        <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Apagar"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold">
+                <td colspan="2">Total</td>
+                <td>@items.Sum(i => i.Quantity).ToString("N2")</td>
+                <td>@items.Sum(i => i.Value).ToString("C2")</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+}

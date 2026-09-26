@@ -33,6 +33,15 @@
                                 <i class="bi bi-box-seam"></i> Produtos
                             </a>
                         </li>
+                        @* Aula 22 — Encomendas: só aparece a quem tem login *@
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">
+                                    <i class="bi bi-cart3"></i> Encomendas
+                                </a>
+                            </li>
+                        }
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">

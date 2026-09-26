@@ -14,5 +14,13 @@ namespace SuperShop.Web.Data
         }
 
         public DbSet<Product> Products { get; set; }
+
+        // Aula 22 — Encomendas
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        // Linhas temporárias (carrinho) enquanto a encomenda não é confirmada.
+        public DbSet<OrderDetailTemp> OrderDetailsTemp { get; set; }
     }
 }
